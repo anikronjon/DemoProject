@@ -4,6 +4,8 @@ A Rust CLI tool that extracts **MCQ** (Multiple-Choice Questions) and **CQ**
 (Comprehension / Short-answer Questions) from PDF and image files, then outputs
 the structured data as **JSON**, **DOCX**, or plain **TXT**.
 
+It also supports **AI-powered MCQ generation** from PDFs and images via the Claude API.
+
 ---
 
 ## Features
@@ -17,7 +19,7 @@ the structured data as **JSON**, **DOCX**, or plain **TXT**.
 | JSON output | ✅ |
 | DOCX output | ✅ |
 | TXT output | ✅ |
-| Generate MCQs from PDF textbooks | 🔜 planned |
+| Auto-generate MCQs from PDF/image via Claude AI | ✅ |
 
 ---
 
@@ -78,6 +80,29 @@ oqe extract exam.pdf --raw
 oqe extract exam.pdf --stdout
 ```
 
+### Auto-generate MCQs using Claude AI
+
+```bash
+# From a PDF file
+oqe generate textbook.pdf --count 10 --api-key sk-ant-...
+
+# With a topic hint
+oqe generate textbook.pdf --count 5 --topic "photosynthesis"
+
+# From raw text
+oqe generate --text "The mitochondria is the powerhouse of the cell..." --count 3
+
+# Use a specific Claude model
+oqe generate textbook.pdf --model claude-opus-4-6 --count 10
+
+# Output to stdout
+oqe generate textbook.pdf --count 5 --stdout
+
+# Use ANTHROPIC_API_KEY env var instead of passing --api-key
+export ANTHROPIC_API_KEY=sk-ant-...
+oqe generate textbook.pdf --count 10
+```
+
 ---
 
 ## JSON output format
@@ -122,6 +147,10 @@ src/
 ├── extractor/
 │   ├── pdf.rs           # PDF text extraction (pdf-extract)
 │   └── image.rs         # Image OCR via Tesseract (feature: ocr)
+├── generator/
+│   ├── mod.rs           # MCQ generation orchestration
+│   ├── llm.rs           # Claude API streaming client
+│   └── prompt.rs        # Prompt templates
 ├── parser/
 │   ├── mcq.rs           # MCQ detection & parsing
 │   └── cq.rs            # CQ detection & parsing
@@ -135,7 +164,6 @@ src/
 
 ## Roadmap
 
-- [ ] Auto-generate MCQs from PDF textbook chapters (LLM integration)
 - [ ] Answer key extraction from answer sheets
 - [ ] Batch processing of multiple files
 - [ ] Confidence scores for parsed questions

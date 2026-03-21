@@ -79,22 +79,22 @@ fn add_mcq(mut doc: Docx, q: &McqQuestion) -> Docx {
         ),
     );
 
-    // Options
+    // Options — correct option is highlighted in green
     for opt in &q.options {
+        let label_text = if opt.is_correct {
+            format!("    ({})  {} ✓", opt.label, opt.text)
+        } else {
+            format!("    ({})  {}", opt.label, opt.text)
+        };
+        let run = if opt.is_correct {
+            body_run(label_text).color("2E7D32") // dark green
+        } else {
+            body_run(label_text)
+        };
         doc = doc.add_paragraph(
             Paragraph::new()
-                .add_run(body_run(format!("    ({})  {}", opt.label, opt.text)))
+                .add_run(run)
                 .indent(Some(720), None, None, None),
-        );
-    }
-
-    // Answer key (if present)
-    if let Some(ans) = &q.answer {
-        doc = doc.add_paragraph(
-            Paragraph::new().add_run(
-                body_run(format!("    ✓ Answer: {}", ans))
-                    .color("2E7D32"), // dark green
-            ),
         );
     }
 

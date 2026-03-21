@@ -2,17 +2,16 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::sync::OnceLock;
 
-/// A multiple-choice question with up to 4 options and an optional answer key.
+/// A multiple-choice question with up to 4 options.
+/// The correct answer is indicated by `is_correct: true` on the matching option.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct McqQuestion {
     /// Sequential number extracted from the source text.
     pub number: u32,
     /// The question stem (the actual question text).
     pub stem: String,
-    /// Answer options keyed by label (A, B, C, D).
+    /// Answer options (A–D). The correct one has `is_correct: true`.
     pub options: Vec<McqOption>,
-    /// Correct answer label, if present in the source (e.g. from an answer key).
-    pub answer: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -105,7 +104,6 @@ pub fn parse(text: &str) -> Vec<McqQuestion> {
                     number,
                     stem,
                     options,
-                    answer: None,
                 });
                 i = j;
                 continue;

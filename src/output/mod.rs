@@ -41,10 +41,8 @@ fn txt_write(result: &ExtractionResult, output_path: &Path) -> Result<()> {
             Question::Mcq(m) => {
                 out.push_str(&format!("{}. [MCQ] {}\n", m.number, m.stem));
                 for opt in &m.options {
-                    out.push_str(&format!("   {}. {}\n", opt.label, opt.text));
-                }
-                if let Some(ans) = &m.answer {
-                    out.push_str(&format!("   Answer: {}\n", ans));
+                    let marker = if opt.is_correct { " ✓" } else { "" };
+                    out.push_str(&format!("   {}. {}{}\n", opt.label, opt.text, marker));
                 }
                 out.push('\n');
             }

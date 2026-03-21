@@ -177,7 +177,6 @@ fn parse_llm_response(raw: &str, number_offset: usize) -> Result<Vec<McqQuestion
             number,
             stem,
             options,
-            answer,
         });
     }
 
@@ -231,6 +230,8 @@ mod tests {
         let qs = parse_llm_response(json, 0).unwrap();
         assert_eq!(qs.len(), 1);
         assert_eq!(qs[0].stem, "What is Rust?");
-        assert_eq!(qs[0].answer.as_deref(), Some("A"));
+        // Correct answer is now embedded in the option with is_correct: true.
+        let correct = qs[0].options.iter().find(|o| o.is_correct);
+        assert_eq!(correct.map(|o| o.label.as_str()), Some("A"));
     }
 }

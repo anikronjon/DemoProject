@@ -1,4 +1,5 @@
 pub mod extractor;
+pub mod generator;
 pub mod output;
 pub mod parser;
 

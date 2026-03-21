@@ -68,8 +68,10 @@ pub fn parse(text: &str) -> Vec<CqQuestion> {
     let q_re = question_re();
     let part_re = part_re();
     let marks_re = marks_re();
+    // Only count bare-letter options like "A. text" or "A) text".
+    // Parenthesised forms "(a) text" are CQ sub-parts, not MCQ options.
     let opt_re =
-        Regex::new(r"(?mi)^\(?([A-Da-d])[.)]\)?\s+(.+)$").unwrap();
+        Regex::new(r"(?mi)^([A-Da-d])[.)]\s+(.+)$").unwrap();
 
     let mut i = 0;
     while i < lines.len() {

@@ -34,10 +34,10 @@ Each object must follow this exact schema:
   "number": <integer, 1-based>,
   "stem": "<question text>",
   "options": [
-    {{"label": "A", "text": "<option text>"}},
-    {{"label": "B", "text": "<option text>"}},
-    {{"label": "C", "text": "<option text>"}},
-    {{"label": "D", "text": "<option text>"}}
+    {{"label": "A", "text": "<option text>", "is_correct": false}},
+    {{"label": "B", "text": "<option text>", "is_correct": true}},
+    {{"label": "C", "text": "<option text>", "is_correct": false}},
+    {{"label": "D", "text": "<option text>", "is_correct": false}}
   ],
   "answer": "<correct label: A | B | C | D>",
   "difficulty": "<easy | medium | hard>"

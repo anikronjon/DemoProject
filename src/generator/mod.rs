@@ -165,7 +165,9 @@ fn parse_llm_response(raw: &str, number_offset: usize) -> Result<Vec<McqQuestion
                     .filter_map(|o| {
                         let label = o.get("label")?.as_str()?.to_uppercase();
                         let text = o.get("text")?.as_str()?.to_string();
-                        Some(McqOption { label, text })
+                        // Mark the correct option so the answer is embedded in the options.
+                        let is_correct = answer.as_deref() == Some(label.as_str());
+                        Some(McqOption { label, text, is_correct })
                     })
                     .collect::<Vec<_>>()
             })

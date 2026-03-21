@@ -21,6 +21,10 @@ pub struct McqOption {
     pub label: String,
     /// Option text.
     pub text: String,
+    /// Whether this option is the correct answer.
+    /// `false` when the answer is unknown (e.g. regex extraction without an answer key).
+    #[serde(default)]
+    pub is_correct: bool,
 }
 
 // --------------------------------------------------------------------------
@@ -89,7 +93,8 @@ pub fn parse(text: &str) -> Vec<McqQuestion> {
                 if let Some(ocaps) = opt_re.captures(line) {
                     let label = ocaps[1].to_uppercase();
                     let text = ocaps[2].trim().to_string();
-                    options.push(McqOption { label, text });
+                    // Answer unknown from regex extraction; is_correct stays false.
+                    options.push(McqOption { label, text, is_correct: false });
                 }
                 j += 1;
             }

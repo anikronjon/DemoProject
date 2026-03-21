@@ -1,0 +1,57 @@
+[package]
+name = "ocr-question-extractor"
+version = "0.1.0"
+edition = "2021"
+description = "Extract MCQ and CQ from PDFs and images, output as JSON/DOCX"
+license = "MIT"
+
+[[bin]]
+name = "oqe"
+path = "src/main.rs"
+
+[lib]
+name = "ocr_question_extractor"
+path = "src/lib.rs"
+
+[features]
+# Enable Tesseract OCR for image files.
+# Requires system packages: libtesseract-dev, libleptonica-dev, tesseract-ocr
+# Install on Ubuntu/Debian: apt install libtesseract-dev libleptonica-dev tesseract-ocr
+ocr = ["dep:leptess", "dep:tempfile"]
+
+[dependencies]
+# CLI argument parsing
+clap = { version = "4", features = ["derive"] }
+
+# OCR via Tesseract (optional — requires system Tesseract libraries)
+leptess = { version = "0.14", optional = true }
+
+# PDF text extraction
+pdf-extract = "0.7"
+
+# Image loading/pre-processing
+image = "0.25"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# DOCX generation
+docx-rs = "0.4"
+
+# Text / pattern matching
+regex = "1"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Logging
+log = "0.4"
+env_logger = "0.11"
+
+# Temp-file helper (used by OCR extractor)
+tempfile = { version = "3", optional = true }
+
+[dev-dependencies]
+tempfile = "3"
